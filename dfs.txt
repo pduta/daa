@@ -1,0 +1,201 @@
+#include <iostream>
+using namespace std;
+
+struct Node{
+    int data;
+    Node * next;
+    Node * prev;
+    Node(int ele){
+        data = ele;
+        next=prev=NULL;
+    }
+};
+
+class DoublyLinkedList{
+    Node * head;
+    Node * tail;
+    public:
+    DoublyLinkedList(){head=tail=NULL;}
+    void addToHead(int ele);
+    void addToTail(int ele);
+    int removeFromHead();
+    Node * search(int ele);
+    void display();
+    bool isEmpty(){return head==NULL;}
+    Node * getHeadNode(){return head;}
+
+};
+
+void DoublyLinkedList::addToHead(int ele){
+    Node * n = new Node(ele);    
+    if(isEmpty()){
+        head = tail = n;
+    }
+    else{
+        n->next=head;
+        head->prev=n;
+        head = n;
+    }
+}
+
+void DoublyLinkedList::addToTail(int ele){
+    Node * n = new Node(ele);
+    if(isEmpty()){
+        head=tail=n;
+    }
+    else{
+        n->prev=tail;
+        tail->next=n;
+        tail=n;
+    }
+}
+
+int DoublyLinkedList::removeFromHead(){
+    if(!isEmpty()){
+        Node * temp = head;
+        if(head==tail){
+            head=tail=NULL;
+        }
+        else{
+            head=head->next;
+        }
+        int x = temp->data;
+        delete temp;
+        return x;
+    }
+    return 999;
+}
+
+Node * DoublyLinkedList::search(int ele){
+    Node * temp =head;
+    while(temp!=NULL){
+        if(temp->data==ele)
+            return temp;
+        temp=temp->next;
+    }
+    return NULL;
+}
+
+void DoublyLinkedList::display(){
+    cout<<"[ ";
+    Node * temp =head;
+    while(temp!=NULL){
+        cout<<temp->data<<" ,";
+        temp=temp->next;
+    }
+    cout<<"\b]\n";
+}
+
+
+class Stack{
+    DoublyLinkedList list;
+    public:
+    void push(int ele){list.addToHead(ele);}
+    int pop(){return list.removeFromHead();}
+    bool isEmpty(){return list.isEmpty();}
+};
+
+
+class Graph{
+    int vertex;
+    DoublyLinkedList * adjList;
+    bool * visited;
+    public:
+    Graph(int n){
+        vertex = n;
+        
+        adjList = new DoublyLinkedList[vertex];
+        visited = new bool[vertex];
+        for (int i = 0; i < vertex; i++)
+        {
+            visited[i] =false;
+        }
+    }
+    void addEdge(int u,int v);
+    void DFS(int source);
+    void display();
+};
+
+
+void Graph::addEdge(int u,int v){
+    if(adjList[u].search(v)==NULL)
+        adjList[u].addToHead(v);
+}
+
+void Graph::DFS(int source){
+    for (int i = 0; i < vertex; i++)
+    {
+        visited[i] = false;
+    }
+    Stack S;
+    S.push(source);
+    cout<<'[';
+    while(!S.isEmpty()){
+        source = S.pop();
+        if(!visited[source]){
+            visited[source] = true;
+            cout<<source<<",";
+            Node * temp = adjList[source].getHeadNode();
+            while(temp!=NULL){
+                source = temp->data;
+                S.push(source);
+                temp=temp->next;
+            }
+        }
+    }
+    cout<<"\b]\n";
+}
+
+
+void Graph::display(){
+    for (int i = 0; i < vertex; i++)
+    {
+        cout<<"List of vertex "<<i<<": ";
+        adjList[i].display();
+    }
+    
+}
+
+int main(){
+        cout<<"Enter Number of vertex in the Graph:\n";
+    int n;
+    cin>>n;
+
+    Graph A(n);
+    
+    while(true){
+        int u,v;
+        cout<<"Enter 1 to addEdge\n"
+        <<"Enter 2 to display graph\n"
+        <<"Enter 3 to run DFS on graph\n"
+        <<"Enter 4 to exit\n"
+        <<"enter choice:";
+        int ch;
+        cin>>ch;
+        switch (ch)
+        {
+        case 1:
+            cout<<"Enter vertex u and v\n";
+            cin>>u>>v;
+            if((u<n && u>=0) && (v<n && v>=0)){
+                A.addEdge(u,v);}
+            break;
+        case 2:
+            A.display();
+            break;
+        case 3:
+            cout<<endl;
+            for (int  i = 0; i < n; i++)
+            {
+                cout<<"DFS with source vertex "<<i<<": ";
+                A.DFS(i);
+            }
+            break;
+        case 4:
+            exit(0);
+        default:
+            break;
+        }
+    }
+    
+} 

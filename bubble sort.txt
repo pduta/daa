@@ -1,0 +1,65 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+class BubbleSort {
+    int comparison;
+public:
+    int bubble_sort(int arr[], int size) {
+        comparison = 0;
+        for (int i = 0; i < size - 1; i++) {
+            for (int j = 0; j < size - 1 - i; j++) {
+                comparison++;
+                if (arr[j] > arr[j + 1]) {
+                    swap(arr[j], arr[j + 1]);
+                }
+            }
+        }
+        return comparison;
+    }
+};
+
+int main() {
+    BubbleSort s;
+
+    int numArrays;
+    cout << "Enter the number of arrays: ";
+    cin >> numArrays;
+    cout << endl;
+
+    int arrsize[numArrays];
+    cout << "Enter " << numArrays << " array sizes separated by space: ";
+    for (int i = 0; i < numArrays; i++) {
+        cin >> arrsize[i];
+    }
+    cout << endl;
+
+    int lowerRange = 10, upperRange = 50;
+    for (int i = 0; i < numArrays; i++) {
+        int size = arrsize[i];
+        int* arr = new int[size];
+        cout << "Enter " << size << " elements for array " << i + 1 << ": ";
+        for (int j = 0; j < size; j++) {
+            cin >> arr[j];
+        }
+        cout << endl;
+
+        cout << "Array " << i + 1 << " : ";
+        for (int j = 0; j < size; j++) {
+            cout << arr[j] << " ";
+        }
+        cout << endl;
+
+        int result = s.bubble_sort(arr, size);
+        cout << "Sorted in " << result << " comparisons: ";
+        for (int j = 0; j < size; j++) {
+            cout << arr[j] << " ";
+        }
+        cout << endl << endl;
+
+        delete[] arr;
+    }
+
+    return 0;
+}

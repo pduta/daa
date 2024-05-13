@@ -1,0 +1,69 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+class SelectionSort {
+    int comparison;
+public:
+    int selection_sort(int arr[], int size) {
+        comparison = 0;
+        for (int i = 0; i < size - 1; i++) {
+            int least = i;
+            comparison++;
+            for (int j = i + 1; j < size; j++) {
+                if (arr[j] < arr[least]) {
+                    least = j;
+                }
+            }
+            if (least != i) {
+                swap(arr[least], arr[i]);
+            }
+        }
+        return comparison;
+    }
+};
+
+int main() {
+    SelectionSort s;
+
+    int numArrays;
+    cout << "Enter the number of arrays: ";
+    cin >> numArrays;
+    cout << endl;
+
+    int arrsize[numArrays];
+    cout << "Enter " << numArrays << " array sizes separated by space: ";
+    for (int i = 0; i < numArrays; i++) {
+        cin >> arrsize[i];
+    }
+    cout << endl;
+
+    int lowerRange = 10, upperRange = 50;
+    for (int i = 0; i < numArrays; i++) {
+        int size = arrsize[i];
+        int* arr = new int[size];
+        cout << "Enter " << size << " elements for array " << i + 1 << ": ";
+        for (int j = 0; j < size; j++) {
+            cin >> arr[j];
+        }
+        cout << endl;
+
+        cout << "Array " << i + 1 << " : ";
+        for (int j = 0; j < size; j++) {
+            cout << arr[j] << " ";
+        }
+        cout << endl;
+
+        int result = s.selection_sort(arr, size);
+        cout << "Sorted in comparison " << result << " : ";
+        for (int j = 0; j < size; j++) {
+            cout << arr[j] << " ";
+        }
+        cout << endl << endl;
+
+        delete[] arr;
+    }
+
+    return 0;
+}
